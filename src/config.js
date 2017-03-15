@@ -1,11 +1,11 @@
 var CONFIG = {
     work: {
         name: "dirbam",
-        duration: 1
+        duration: 45
     },
     rest: {
         name: "ilsimės",
-        duration: 1
+        duration: 10
     },
     stopped: {
         name: "dirbsim"
