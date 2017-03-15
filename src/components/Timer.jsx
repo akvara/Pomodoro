@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CONFIG from '../config.js';
 
+
 class Timer extends Component {
 
 	constructor(props, context) {
@@ -40,6 +41,11 @@ class Timer extends Component {
 			this.tick();
 			if (this.isTimeUp()) {
 				this.changeStatus();
+				if (this.state.status === CONFIG.work.name) {
+					this.showMessage(CONFIG.work.alert);
+				} else {
+					this.showMessage(CONFIG.rest.alert);
+				}
 			}
 		}.bind(this), 1000);
 	}
@@ -68,7 +74,7 @@ class Timer extends Component {
 	}
 
 	changeStatus() {
-		console.log('Changind status.');
+		console.log('Changing status.');
 		var coll = CONFIG.work;
 		if (this.state.status === CONFIG.work.name) {
 			coll = CONFIG.rest;
@@ -78,8 +84,6 @@ class Timer extends Component {
 			status: coll.name,
 			mins: coll.duration
 		});
-
-		// return clearInterval(this.interval);
 	}
 
 	isTimeUp() {
@@ -144,6 +148,13 @@ class Timer extends Component {
 		return this.state.showStatus ? this.state.status : null;
 	}
 
+	showMessage() {
+		if (this.state.status === CONFIG.work.name) {
+			alert(CONFIG.rest.alert);
+		} else {
+			alert(CONFIG.work.alert);
+		}
+	}
 
 	render() {
 		return (
