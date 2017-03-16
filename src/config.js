@@ -3,18 +3,19 @@ var CONFIG = {
         name: "dirbam",
         alert: "Darbą baigėm - ilsėtis!",
         sound: "https://www.soundjay.com/misc/sounds/bell-ringing-04.mp3",
-        duration: 45
+        duration: 1
     },
     rest: {
         name: "ilsimės",
         alert: "Poilsis baigėsi, einam dirbt",
         sound: "https://www.soundjay.com/misc/sounds/bell-ringing-03.mp3",
-        duration: 10
+        duration: 1
     },
     stopped: {
         name: "dirbsim"
     },
     beepSound: "http://www.soundjay.com/button/beep-07.wav",
+    maxTotalTime: 1,
     version: '0315-21'
 };
 

@@ -8,6 +8,7 @@ class Timer extends Component {
 	    super(props, context);
 
 	    this.state = this.initialState();
+	    this.totalTime = 0;
 	}
 
 	initialState() {
@@ -20,6 +21,16 @@ class Timer extends Component {
 			paused: false
 	    }
 	}
+        // this.registerAPress();
+
+    // aIsPressed() {
+    //     alert("A is pressed");
+    //     $(document).off("keydown");
+    // }
+
+    // registerAPress() {
+    //     $(document).on("keydown", () => this.aIsPressed() )
+    // }
 
 	start() {
 		this.setState({ status: CONFIG.work.name, running: true, paused: false});
@@ -44,11 +55,13 @@ class Timer extends Component {
 		// console.log('Resumed.');
 	}
 
-	finish() {
+	finish(endOfDay) {
 		this.setState({ running: false, paused: false });
 		this.setState(this.initialState());
 		clearInterval(this.interval);
 		clearInterval(this.blinkInterval);
+		if (endOfDay) alert("End of working day!");
+
 
 		// console.log('Finished.');
 	}
@@ -71,10 +84,14 @@ class Timer extends Component {
 	}
 
 	changeStatus() {
+		if (this.totalTime >= CONFIG.maxTotalTime) this.finish(true);
+
 		var coll = CONFIG.work;
 		if (this.state.status === CONFIG.work.name) {
 			coll = CONFIG.rest;
 		}
+
+		this.totalTime += coll.duration;
 
 		this.setState({
 			status: coll.name,
