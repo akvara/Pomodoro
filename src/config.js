@@ -3,20 +3,24 @@ var CONFIG = {
         name: "dirbam",
         alert: "Darbą baigėm - ilsėtis!",
         sound: "https://www.soundjay.com/misc/sounds/bell-ringing-04.mp3",
-        duration: 1
+        duration: 45
     },
     rest: {
         name: "ilsimės",
         alert: "Poilsis baigėsi, einam dirbt",
         sound: "https://www.soundjay.com/misc/sounds/bell-ringing-03.mp3",
-        duration: 1
+        duration: 10
     },
     stopped: {
         name: "dirbsim"
     },
     beepSound: "http://www.soundjay.com/button/beep-07.wav",
-    maxTotalTime: 1,
-    version: '0315-21'
+    endWork: {
+        name: "Darbo diena baigėsi",
+        sound: "https://www.soundjay.com/footsteps/sounds/footsteps-4.mp3",
+    },
+    maxTotalTime: 500,
+    version: '0316-23'
 };
 
 export default Object.freeze(CONFIG);

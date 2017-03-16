@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CONFIG from '../config.js';
-
+import $ from 'jquery';
 
 class Timer extends Component {
 
@@ -9,6 +9,7 @@ class Timer extends Component {
 
 	    this.state = this.initialState();
 	    this.totalTime = 0;
+	    console.log(process.env.NODE_ENV);
 	}
 
 	initialState() {
@@ -21,20 +22,27 @@ class Timer extends Component {
 			paused: false
 	    }
 	}
-        // this.registerAPress();
 
-    // aIsPressed() {
-    //     alert("A is pressed");
-    //     $(document).off("keydown");
-    // }
+    isSpacebarPressed(e) {
+        // console.log("is pressed", '{' + String.fromCharCode(e.which) + '}');
+        // console.log('this.state.running', this.state.running); 
+        // console.log('this.state.paused', this.state.paused);        
+        if (String.fromCharCode(e.which)===' ') {
+	        if (this.state.paused) this.resume();
+	        else if (this.state.running) this.pause();
+        // $(document).off("keydown");
+	    }
 
-    // registerAPress() {
-    //     $(document).on("keydown", () => this.aIsPressed() )
-    // }
+    }
+
+    registerSpacebarPress() {
+        $(document).on("keydown", (e) => this.isSpacebarPressed(e) )
+    }
 
 	start() {
 		this.setState({ status: CONFIG.work.name, running: true, paused: false});
 		this.runTimer();
+    	this.registerSpacebarPress();
 
 		// console.log('Started.');
 	}
@@ -55,15 +63,21 @@ class Timer extends Component {
 		// console.log('Resumed.');
 	}
 
-	finish(endOfDay) {
-		this.setState({ running: false, paused: false });
-		this.setState(this.initialState());
+	stop() {
 		clearInterval(this.interval);
 		clearInterval(this.blinkInterval);
-		if (endOfDay) alert("End of working day!");
-
+		this.setState(this.initialState());
+        $(document).off("keydown");
 
 		// console.log('Finished.');
+	}
+
+	endWork() {
+		this.stop();
+		this.playSound('end');
+		console.log('EOD.');
+
+		// alert("End of working day!");
 	}
 
 	runTimer() {
@@ -84,13 +98,12 @@ class Timer extends Component {
 	}
 
 	changeStatus() {
-		if (this.totalTime >= CONFIG.maxTotalTime) this.finish(true);
+		if (this.totalTime >= CONFIG.maxTotalTime) this.endWork();
 
 		var coll = CONFIG.work;
 		if (this.state.status === CONFIG.work.name) {
 			coll = CONFIG.rest;
 		}
-
 		this.totalTime += coll.duration;
 
 		this.setState({
@@ -122,10 +135,6 @@ class Timer extends Component {
 
 	blink() {
 		this.setState({ showStatus: !this.state.showStatus })
-	}
-
-	reset() {
-		this.setState(this.initialState());
 	}
 
 	minus() {
@@ -166,7 +175,7 @@ class Timer extends Component {
 	buttonStop() {
 		if (!this.state.running && !this.state.paused) return null;
 
-		return <button className="btn btn-lg" ref="stop" onClick={this.finish.bind(this)}>
+		return <button className="btn btn-lg" ref="stop" onClick={this.stop.bind(this)}>
 			<span className="glyphicon glyphicon-stop" aria-hidden="true"></span>
 		</button>
 	}
@@ -199,6 +208,10 @@ class Timer extends Component {
 	}
 
 	render() {
+		if (this.totalTime >= CONFIG.maxTotalTime) {
+			return <div className="center-block center"><h1>{CONFIG.endWork.name}</h1></div>
+		}
+		
 		return (
 			<div className="center-block center">
 				<h1>Dabar <strong>{this.displayStatus()}</strong></h1>
