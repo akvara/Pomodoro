@@ -25,7 +25,15 @@ class Timer extends Component {
 		this.setState({ status: CONFIG.work.name, running: true, paused: false});
 		this.runTimer();
 
-		console.log('Started.');
+		// console.log('Started.');
+	}
+
+	pause() {
+		clearInterval(this.interval);
+		this.setState({ running: false, paused: true });
+		this.runBlinkTimer();
+
+		// console.log('Paused.');
 	}
 
 	resume() {
@@ -33,19 +41,25 @@ class Timer extends Component {
 		this.setState({ running: true, paused: false, showStatus: true });
 		this.runTimer();
 
-		console.log('Resumed.');
+		// console.log('Resumed.');
+	}
+
+	finish() {
+		this.setState({ running: false, paused: false });
+		this.setState(this.initialState());
+		clearInterval(this.interval);
+		clearInterval(this.blinkInterval);
+
+		// console.log('Finished.');
 	}
 
 	runTimer() {
 		this.interval = setInterval(function() {
 			this.tick();
+			this.checkIfEnding();
 			if (this.isTimeUp()) {
 				this.changeStatus();
-				if (this.state.status === CONFIG.work.name) {
-					this.showMessage(CONFIG.work.alert);
-				} else {
-					this.showMessage(CONFIG.rest.alert);
-				}
+				this.alertFinished();
 			}
 		}.bind(this), 1000);
 	}
@@ -56,25 +70,7 @@ class Timer extends Component {
 		}.bind(this), 600);
 	}
 
-	pause() {
-		clearInterval(this.interval);
-		this.setState({ running: false, paused: true });
-		this.runBlinkTimer();
-
-		console.log('Paused.');
-	}
-
-	finish() {
-		this.setState({ running: false, paused: false });
-		this.setState(this.initialState());
-		clearInterval(this.interval);
-		clearInterval(this.blinkInterval);
-
-		console.log('Finished.');
-	}
-
 	changeStatus() {
-		console.log('Changing status.');
 		var coll = CONFIG.work;
 		if (this.state.status === CONFIG.work.name) {
 			coll = CONFIG.rest;
@@ -84,10 +80,17 @@ class Timer extends Component {
 			status: coll.name,
 			mins: coll.duration
 		});
+
+		// console.log('Changing status.');
 	}
 
 	isTimeUp() {
 		return this.state.mins <= 0 && this.state.secs <= 0;
+	}
+
+	checkIfEnding() {
+		if (this.state.mins === 0 && this.state.secs < 5)
+			this.playSound("beep");
 	}
 
 	tick() {
@@ -97,7 +100,6 @@ class Timer extends Component {
 			secs = 59;
 			mins--
 		}
-
 		this.setState({ mins, secs })
 	}
 
@@ -107,6 +109,14 @@ class Timer extends Component {
 
 	reset() {
 		this.setState(this.initialState());
+	}
+
+	minus() {
+		if (this.state.mins > 5) {
+			this.setState({mins: this.state.mins - 5});
+		} else if (this.state.mins > 1) {
+			this.setState({mins: this.state.mins - 1});
+		}
 	}
 
 	formatTime() {
@@ -144,15 +154,30 @@ class Timer extends Component {
 		</button>
 	}
 
+	buttonMinus() {
+		if (this.state.running || this.state.paused ) return null;
+
+		return <button className="btn btn-lg" ref="minus" onClick={this.minus.bind(this)}>
+			<span className="glyphicon glyphicon-minus" aria-hidden="true"></span>
+		</button>
+	}
+
 	displayStatus() {
 		return this.state.showStatus ? this.state.status : null;
 	}
 
-	showMessage() {
-		if (this.state.status === CONFIG.work.name) {
-			alert(CONFIG.rest.alert);
+    playSound(soundId) {
+		var sound = document.getElementById(soundId);
+        sound.play()
+    }
+
+	alertFinished() {
+      	if (this.state.status === CONFIG.work.name) {
+      		this.playSound('rest');
+			// alert(CONFIG.rest.alert);
 		} else {
-			alert(CONFIG.work.alert);
+      		this.playSound('work');
+			// alert(CONFIG.work.alert);
 		}
 	}
 
@@ -160,7 +185,7 @@ class Timer extends Component {
 		return (
 			<div className="center-block center">
 				<h1>Dabar <strong>{this.displayStatus()}</strong></h1>
-				<h1>Liko <strong>{this.formatTime()}</strong></h1>
+				<h1>Liko <strong>{this.formatTime()}</strong>&nbsp;{ this.buttonMinus() }</h1>
 				<br />
 				{ this.buttonStart() }
 				{ this.buttonPause() }
