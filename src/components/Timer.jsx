@@ -24,9 +24,6 @@ class Timer extends Component {
 	}
 
     isSpacebarPressed(e) {
-        // console.log("is pressed", '{' + String.fromCharCode(e.which) + '}');
-        // console.log('this.state.running', this.state.running); 
-        // console.log('this.state.paused', this.state.paused);        
         if (String.fromCharCode(e.which)===' ') {
 	        if (this.state.paused) this.resume();
 	        else if (this.state.running) this.pause();
@@ -76,6 +73,7 @@ class Timer extends Component {
 		this.stop();
 		this.playSound('end');
 		console.log('EOD.');
+        $(document).off("keydown");
 
 		// alert("End of working day!");
 	}
@@ -137,11 +135,16 @@ class Timer extends Component {
 		this.setState({ showStatus: !this.state.showStatus })
 	}
 
+	updateConstant() {
+		CONFIG.work.duration = this.state.mins;
+		console.log(CONFIG);
+	}
+
 	minus() {
 		if (this.state.mins > 5) {
-			this.setState({mins: this.state.mins - 5});
+			this.setState({mins: this.state.mins - 5}, this.updateConstant);
 		} else if (this.state.mins > 1) {
-			this.setState({mins: this.state.mins - 1});
+			this.setState({mins: this.state.mins - 1}, this.updateConstant);
 		}
 	}
 
@@ -211,7 +214,7 @@ class Timer extends Component {
 		if (this.totalTime >= CONFIG.maxTotalTime) {
 			return <div className="center-block center"><h1>{CONFIG.endWork.name}</h1></div>
 		}
-		
+
 		return (
 			<div className="center-block center">
 				<h1>Dabar <strong>{this.displayStatus()}</strong></h1>

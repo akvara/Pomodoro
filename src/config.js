@@ -20,7 +20,7 @@ var CONFIG = {
         sound: "https://www.soundjay.com/footsteps/sounds/footsteps-4.mp3",
     },
     maxTotalTime: 500,
-    version: '0316-23'
+    version: '0317-21'
 };
 
-export default Object.freeze(CONFIG);
+export default CONFIG;
