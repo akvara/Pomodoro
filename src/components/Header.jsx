@@ -7,7 +7,8 @@ class Header extends Component {
         return (
         	<div>
 	            <img src={logo} alt="logo" />
-	            <audio id="beep" src={CONFIG.beepSound}></audio>
+                <audio id="beep" src={CONFIG.beepSound}></audio>
+	            <audio id="click" src={CONFIG.clickSound}></audio>
 	            <audio id="work" src={CONFIG.work.sound}></audio>
                 <audio id="rest" src={CONFIG.rest.sound}></audio>
                 <audio id="end" src={CONFIG.endWork.sound}></audio>

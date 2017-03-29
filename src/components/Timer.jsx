@@ -9,7 +9,7 @@ class Timer extends Component {
 
 	    this.state = this.initialState();
 	    this.totalTime = 0;
-	    console.log(process.env.NODE_ENV);
+	    console.log(process.env.NODE_ENV, CONFIG.version);
 	}
 
 	initialState() {
@@ -27,7 +27,6 @@ class Timer extends Component {
         if (String.fromCharCode(e.which)===' ') {
 	        if (this.state.paused) this.resume();
 	        else if (this.state.running) this.pause();
-        // $(document).off("keydown");
 	    }
 
     }
@@ -37,6 +36,7 @@ class Timer extends Component {
     }
 
 	start() {
+   		this.playSound('click');
 		this.setState({ status: CONFIG.work.name, running: true, paused: false});
 		this.runTimer();
     	this.registerSpacebarPress();
@@ -45,6 +45,7 @@ class Timer extends Component {
 	}
 
 	pause() {
+   		this.playSound('click');
 		clearInterval(this.interval);
 		this.setState({ running: false, paused: true });
 		this.runBlinkTimer();
@@ -53,6 +54,7 @@ class Timer extends Component {
 	}
 
 	resume() {
+   		this.playSound('click');
 		clearInterval(this.blinkInterval);
 		this.setState({ running: true, paused: false, showStatus: true });
 		this.runTimer();
@@ -61,6 +63,7 @@ class Timer extends Component {
 	}
 
 	stop() {
+   		this.playSound('click');
 		clearInterval(this.interval);
 		clearInterval(this.blinkInterval);
 		this.setState(this.initialState());
@@ -70,8 +73,9 @@ class Timer extends Component {
 	}
 
 	endWork() {
-		this.stop();
 		this.playSound('end');
+		clearInterval(this.interval);
+		clearInterval(this.blinkInterval);
 		console.log('EOD.');
         $(document).off("keydown");
 
@@ -96,7 +100,6 @@ class Timer extends Component {
 	}
 
 	changeStatus() {
-		if (this.totalTime >= CONFIG.maxTotalTime) this.endWork();
 
 		var coll = CONFIG.work;
 		if (this.state.status === CONFIG.work.name) {
@@ -104,12 +107,13 @@ class Timer extends Component {
 		}
 		this.totalTime += coll.duration;
 
+
 		this.setState({
 			status: coll.name,
 			mins: coll.duration
 		});
 
-		// console.log('Changing status.');
+		if (this.totalTime >= CONFIG.maxTotalTime) this.endWork();
 	}
 
 	isTimeUp() {
@@ -203,10 +207,8 @@ class Timer extends Component {
 	alertFinished() {
       	if (this.state.status === CONFIG.work.name) {
       		this.playSound('rest');
-			// alert(CONFIG.rest.alert);
 		} else {
       		this.playSound('work');
-			// alert(CONFIG.work.alert);
 		}
 	}
 
@@ -223,7 +225,7 @@ class Timer extends Component {
 				{ this.buttonStart() }
 				{ this.buttonPause() }
 				{ this.buttonResume() }
-				&nbsp;
+				&nbsp;&nbsp;
 				{ this.buttonStop() }
 			</div>
 		);
