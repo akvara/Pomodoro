@@ -30,8 +30,8 @@ class Header extends Component {
     minus(which) {
         var newValue = {};
 
-        if (this.state[which] > 5) {
-            newValue[which] = this.state[which] - 5;
+        if (this.state[which] > 10) {
+            newValue[which] = this.state[which] - 10;
         } else if (this.state[which] > 1) {
             newValue[which] = this.state[which] - 1;
         }
@@ -41,8 +41,8 @@ class Header extends Component {
     plus(which) {
         var newValue = {};
 
-        if (this.state[which] >= 5) {
-            newValue[which] = this.state[which] + 5;
+        if (this.state[which] >= 10) {
+            newValue[which] = this.state[which] + 10;
         } else {
             newValue[which] = this.state[which] + 1;
         }

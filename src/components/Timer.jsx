@@ -8,7 +8,6 @@ class Timer extends Component {
 
 	    this.state = this.initialState();
 	    this.totalTime = 0;
-	    this.who = "Im Timer"
 
 	    console.log(process.env.NODE_ENV, window.CONFIG.version);
 	}
@@ -106,7 +105,6 @@ class Timer extends Component {
 	}
 
 	changeStatus() {
-
 		var coll = window.CONFIG.work;
 		if (this.state.status === window.CONFIG.work.name) {
 			coll = window.CONFIG.rest;
