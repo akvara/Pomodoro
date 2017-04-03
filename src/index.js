@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Header from './components/Header';
-import Timer from './components/Timer';
+import Audio from './components/Audio';
+import App from './components/App';
 
-ReactDOM.render(<Header />, document.getElementById('header'));
-ReactDOM.render(<Timer />, document.getElementById('timer'));
+ReactDOM.render(<Audio/>, document.getElementById('audio'));
+ReactDOM.render(<App/>, document.getElementById('app'));

@@ -1,4 +1,4 @@
-var CONFIG = {
+window.CONFIG = {
     work: {
         name: "dirbam",
         alert: "Darbą baigėm - ilsėtis!",
@@ -10,7 +10,7 @@ var CONFIG = {
         name: "ilsimės",
         alert: "Poilsis baigėsi, einam dirbt",
         sound: "https://www.soundjay.com/misc/sounds/bell-ringing-03.mp3",
-        duration: 7
+        duration: 8
     },
     stopped: {
         name: "dirbsim"
@@ -22,7 +22,14 @@ var CONFIG = {
         sound: "https://www.soundjay.com/footsteps/sounds/footsteps-4.mp3",
     },
     maxTotalTime: 490,
-    version: '0329-18'
+    muted: false,
+    version: '0403-03'
 };
 
-export default CONFIG;
+if (process.env.NODE_ENV === 'development') {
+    window.CONFIG.work.duration = 1;
+    window.CONFIG.rest.duration = 2;
+    window.CONFIG.maxTotalTime = 2;
+}
+
+// export default CONFIG;

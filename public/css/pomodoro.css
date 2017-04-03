@@ -1,3 +1,4 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
 body {
     font-family: Raleway, sans-serif;
     font-size: 14px;
@@ -5,3 +6,7 @@ body {
     color: #636b6f;
     background-color: #f5f8fa;
 }
+.right-align {
+    text-align: right;
+}
+

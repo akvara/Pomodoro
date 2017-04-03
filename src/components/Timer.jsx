@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import CONFIG from '../config.js';
 import $ from 'jquery';
 
 class Timer extends Component {
@@ -9,13 +8,15 @@ class Timer extends Component {
 
 	    this.state = this.initialState();
 	    this.totalTime = 0;
-	    console.log(process.env.NODE_ENV, CONFIG.version);
+	    this.who = "Im Timer"
+
+	    console.log(process.env.NODE_ENV, window.CONFIG.version);
 	}
 
 	initialState() {
 		return {
-	    	status: CONFIG.stopped.name,
-			mins: CONFIG.work.duration,
+	    	status: window.CONFIG.stopped.name,
+			mins: window.CONFIG.work.duration,
 			secs: 0,
 			showStatus: true,
 			running: false,
@@ -37,7 +38,12 @@ class Timer extends Component {
 
 	start() {
    		this.playSound('click');
-		this.setState({ status: CONFIG.work.name, running: true, paused: false});
+		this.setState({
+			status: window.CONFIG.work.name,
+			mins: window.CONFIG.work.duration,
+			running: true,
+			paused: false
+		});
 		this.runTimer();
     	this.registerSpacebarPress();
 
@@ -101,9 +107,9 @@ class Timer extends Component {
 
 	changeStatus() {
 
-		var coll = CONFIG.work;
-		if (this.state.status === CONFIG.work.name) {
-			coll = CONFIG.rest;
+		var coll = window.CONFIG.work;
+		if (this.state.status === window.CONFIG.work.name) {
+			coll = window.CONFIG.rest;
 		}
 		this.totalTime += coll.duration;
 
@@ -113,7 +119,7 @@ class Timer extends Component {
 			mins: coll.duration
 		});
 
-		if (this.totalTime >= CONFIG.maxTotalTime) this.endWork();
+		if (this.totalTime >= window.CONFIG.maxTotalTime) this.endWork();
 	}
 
 	isTimeUp() {
@@ -137,19 +143,6 @@ class Timer extends Component {
 
 	blink() {
 		this.setState({ showStatus: !this.state.showStatus })
-	}
-
-	updateConstant() {
-		CONFIG.work.duration = this.state.mins;
-		console.log(CONFIG);
-	}
-
-	minus() {
-		if (this.state.mins > 5) {
-			this.setState({mins: this.state.mins - 5}, this.updateConstant);
-		} else if (this.state.mins > 1) {
-			this.setState({mins: this.state.mins - 1}, this.updateConstant);
-		}
 	}
 
 	formatTime() {
@@ -187,25 +180,19 @@ class Timer extends Component {
 		</button>
 	}
 
-	buttonMinus() {
-		if (this.state.running || this.state.paused ) return null;
-
-		return <button className="btn btn-lg" ref="minus" onClick={this.minus.bind(this)}>
-			<span className="glyphicon glyphicon-minus" aria-hidden="true"></span>
-		</button>
-	}
-
 	displayStatus() {
 		return this.state.showStatus ? this.state.status : null;
 	}
 
     playSound(soundId) {
-		var sound = document.getElementById(soundId);
-        sound.play()
+    	if (!window.CONFIG.muted) {
+			var sound = document.getElementById(soundId);
+	        sound.play()
+    	}
     }
 
 	alertFinished() {
-      	if (this.state.status === CONFIG.work.name) {
+      	if (this.state.status === window.CONFIG.work.name) {
       		this.playSound('rest');
 		} else {
       		this.playSound('work');
@@ -213,14 +200,17 @@ class Timer extends Component {
 	}
 
 	render() {
-		if (this.totalTime >= CONFIG.maxTotalTime) {
-			return <div className="center-block center"><h1>{CONFIG.endWork.name}</h1></div>
+		if (this.totalTime >= window.CONFIG.maxTotalTime) {
+			document.title = window.CONFIG.endWork.name;
+			return <div className="center-block center"><h1>{window.CONFIG.endWork.name}</h1></div>
 		}
 
+		document.title = "Pomodoro" + (this.displayStatus() ? " - " + this.displayStatus() : "");
+
 		return (
-			<div className="center-block center">
+			<div>
 				<h1>Dabar <strong>{this.displayStatus()}</strong></h1>
-				<h1>Liko <strong>{this.formatTime()}</strong>&nbsp;{ this.buttonMinus() }</h1>
+				<h1>Liko <strong>{this.formatTime()}</strong></h1>
 				<br />
 				{ this.buttonStart() }
 				{ this.buttonPause() }
