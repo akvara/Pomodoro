@@ -31,7 +31,7 @@ class Header extends Component {
         var newValue = {};
 
         if (this.state[which] > 10) {
-            newValue[which] = this.state[which] - 10;
+            newValue[which] = this.state[which] - 5;
         } else if (this.state[which] > 1) {
             newValue[which] = this.state[which] - 1;
         }
@@ -42,7 +42,7 @@ class Header extends Component {
         var newValue = {};
 
         if (this.state[which] >= 10) {
-            newValue[which] = this.state[which] + 10;
+            newValue[which] = this.state[which] + 5;
         } else {
             newValue[which] = this.state[which] + 1;
         }
@@ -50,13 +50,13 @@ class Header extends Component {
     }
 
     buttonMinus(which) {
-        return <button className="btn btn-lg" ref="minus" onClick={this.minus.bind(this, which)}>
+        return <button className="btn btn-sm" ref="minus" onClick={this.minus.bind(this, which)}>
             <span className="glyphicon glyphicon-minus" aria-hidden="true"></span>
         </button>
     }
 
     buttonPlus(which) {
-        return <button className="btn btn-lg" ref="plus" onClick={this.plus.bind(this, which)}>
+        return <button className="btn btn-sm" ref="plus" onClick={this.plus.bind(this, which)}>
             <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button>
     }
@@ -65,13 +65,13 @@ class Header extends Component {
         var muteGlyph = "glyphicon glyphicon-volume-down";
         if (this.state.muted) muteGlyph = "glyphicon glyphicon-volume-off";
 
-        return <button className="btn btn-lg" ref="mute" onClick={this.toggleMute.bind(this)}>
+        return <button className="btn btn-sm" ref="mute" onClick={this.toggleMute.bind(this)}>
             <span className={muteGlyph} aria-hidden="true"></span>
         </button>
     }
 
     settingButton(which) {
-        return <h2>
+        return <h3>
             { this.buttonMinus(which) }
             &nbsp;
             { this.state[which] }
@@ -79,7 +79,7 @@ class Header extends Component {
             { this.buttonPlus(which) }
             &nbsp;
             { window.CONFIG[which].name}
-        </h2>
+        </h3>
     }
 
     render() {

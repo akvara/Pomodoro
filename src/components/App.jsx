@@ -3,7 +3,6 @@ import Settings from './Settings';
 import Timer from './Timer';
 
 class App extends React.Component {
-
     render() {
         return (
             <div>
@@ -12,7 +11,6 @@ class App extends React.Component {
             </div>
         );
     }
-  // Define 'siblingAFunc' and 'siblingBFunc' here
 }
 
 export default App;

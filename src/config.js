@@ -23,7 +23,7 @@ window.CONFIG = {
     },
     maxTotalTime: 490,
     muted: false,
-    version: '0403-03'
+    version: '0421-21'
 };
 
 if (process.env.NODE_ENV === 'development') {
@@ -31,5 +31,3 @@ if (process.env.NODE_ENV === 'development') {
     window.CONFIG.rest.duration = 2;
     window.CONFIG.maxTotalTime = 2;
 }
-
-// export default CONFIG;
