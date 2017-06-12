@@ -28,7 +28,6 @@ class Timer extends Component {
 	        if (this.state.paused) this.resume();
 	        else if (this.state.running) this.pause();
 	    }
-
     }
 
     registerSpacebarPress() {
