@@ -23,7 +23,7 @@ window.CONFIG = {
     },
     maxTotalTime: 490,
     muted: false,
-    version: '0612-11'
+    version: '0616-11'
 };
 
 if (process.env.NODE_ENV === 'development') {

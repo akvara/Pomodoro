@@ -8,9 +8,8 @@ class Header extends Component {
         this.state = {
             visible: false,
             muted: false,
-
-                'work': window.CONFIG.work.duration,
-                'rest': window.CONFIG.rest.duration
+            work: window.CONFIG.work.duration,
+            rest: window.CONFIG.rest.duration
         }
     }
 
@@ -93,7 +92,7 @@ class Header extends Component {
         return (
             <div>
                 <img src={logo} alt="logo" onClick={this.toggleVisibility.bind(this)} />
-                <br />
+                <br /><small>{window.CONFIG.version}</small><br />
                 { this.buttonMute() }
                 { this.settingButton('work') }
                 { this.settingButton('rest') }
