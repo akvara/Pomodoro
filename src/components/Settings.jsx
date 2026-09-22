@@ -1,106 +1,124 @@
-import React, { Component } from 'react';
-import logo from '../../public/pomodoro.png';
+import React, { Component } from "react";
+import logo from "../assets/pomodoro.png";
 
 class Header extends Component {
-    constructor(props, context) {
-        super(props, context);
+  constructor(props, context) {
+    super(props, context);
 
-        this.state = {
-            visible: false,
-            muted: false,
-            work: window.CONFIG.work.duration,
-            rest: window.CONFIG.rest.duration
-        }
+    this.state = {
+      visible: false,
+      muted: false,
+      work: window.CONFIG.work.duration,
+      rest: window.CONFIG.rest.duration,
+    };
+  }
+
+  toggleVisibility() {
+    this.setState({ visible: !this.state.visible });
+  }
+
+  toggleMute() {
+    window.CONFIG.muted = !this.state.muted;
+    this.setState({ muted: !this.state.muted });
+  }
+
+  updateConfigValue(which) {
+    window.CONFIG[which].duration = this.state[which];
+  }
+
+  minus(which) {
+    var newValue = {};
+
+    if (this.state[which] > 10) {
+      newValue[which] = this.state[which] - 5;
+    } else if (this.state[which] > 1) {
+      newValue[which] = this.state[which] - 1;
     }
+    this.setState(newValue, this.updateConfigValue.bind(this, which));
+  }
 
-    toggleVisibility() {
-        this.setState({ visible: !this.state.visible })
+  plus(which) {
+    var newValue = {};
+
+    if (this.state[which] >= 10) {
+      newValue[which] = this.state[which] + 5;
+    } else {
+      newValue[which] = this.state[which] + 1;
     }
+    this.setState(newValue, this.updateConfigValue.bind(this, which));
+  }
 
-    toggleMute() {
-        window.CONFIG.muted = !this.state.muted;
-        this.setState({ muted: !this.state.muted })
-    }
+  buttonMinus(which) {
+    return (
+      <button className="btn btn-sm" onClick={this.minus.bind(this, which)}>
+        <span className="glyphicon glyphicon-minus" aria-hidden="true"></span>
+      </button>
+    );
+  }
 
-    updateConfigValue(which) {
-        window.CONFIG[which].duration = this.state[which];
-    }
+  buttonPlus(which) {
+    return (
+      <button className="btn btn-sm" onClick={this.plus.bind(this, which)}>
+        <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
+      </button>
+    );
+  }
 
-    minus(which) {
-        var newValue = {};
+  buttonMute() {
+    var muteGlyph = "glyphicon glyphicon-volume-down";
+    if (this.state.muted) muteGlyph = "glyphicon glyphicon-volume-off";
 
-        if (this.state[which] > 10) {
-            newValue[which] = this.state[which] - 5;
-        } else if (this.state[which] > 1) {
-            newValue[which] = this.state[which] - 1;
-        }
-        this.setState(newValue, this.updateConfigValue.bind(this, which));
-    }
+    return (
+      <button className="btn btn-sm" onClick={this.toggleMute.bind(this)}>
+        <span className={muteGlyph} aria-hidden="true"></span>
+      </button>
+    );
+  }
 
-    plus(which) {
-        var newValue = {};
+  settingButton(which) {
+    return (
+      <h3>
+        {this.buttonMinus(which)}
+        &nbsp;
+        {this.state[which]}
+        &nbsp;
+        {this.buttonPlus(which)}
+        &nbsp;
+        {window.CONFIG[which].name}
+      </h3>
+    );
+  }
 
-        if (this.state[which] >= 10) {
-            newValue[which] = this.state[which] + 5;
-        } else {
-            newValue[which] = this.state[which] + 1;
-        }
-        this.setState(newValue, this.updateConfigValue.bind(this, which));
-    }
+  render() {
+    if (!this.state.visible)
+      return (
+        <div>
+          <img
+            src={logo}
+            alt="logo"
+            title={window.CONFIG.version}
+            onClick={this.toggleVisibility.bind(this)}
+          />
+        </div>
+      );
 
-    buttonMinus(which) {
-        return <button className="btn btn-sm" ref="minus" onClick={this.minus.bind(this, which)}>
-            <span className="glyphicon glyphicon-minus" aria-hidden="true"></span>
-        </button>
-    }
-
-    buttonPlus(which) {
-        return <button className="btn btn-sm" ref="plus" onClick={this.plus.bind(this, which)}>
-            <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
-        </button>
-    }
-
-    buttonMute() {
-        var muteGlyph = "glyphicon glyphicon-volume-down";
-        if (this.state.muted) muteGlyph = "glyphicon glyphicon-volume-off";
-
-        return <button className="btn btn-sm" ref="mute" onClick={this.toggleMute.bind(this)}>
-            <span className={muteGlyph} aria-hidden="true"></span>
-        </button>
-    }
-
-    settingButton(which) {
-        return <h3>
-            { this.buttonMinus(which) }
-            &nbsp;
-            { this.state[which] }
-            &nbsp;
-            { this.buttonPlus(which) }
-            &nbsp;
-            { window.CONFIG[which].name}
-        </h3>
-    }
-
-    render() {
-
-        if (!this.state.visible) return (
-            <div>
-                <img src={logo} alt="logo" onClick={this.toggleVisibility.bind(this)} />
-            </div>
-        );
-
-        return (
-            <div>
-                <img src={logo} alt="logo" onClick={this.toggleVisibility.bind(this)} />
-                <br /><small>{window.CONFIG.version}</small><br />
-                { this.buttonMute() }
-                { this.settingButton('work') }
-                { this.settingButton('rest') }
-            </div>
-
-        );
-
-    }
+    return (
+      <div>
+        <img
+          src={logo}
+          alt="logo"
+          title={window.CONFIG.version}
+          onClick={this.toggleVisibility.bind(this)}
+        />
+        <br />
+        <small>{window.CONFIG.version}</small>
+        <br />
+        {this.buttonMute()}
+        {this.settingButton("work")}
+        {this.settingButton("rest")}
+      </div>
+    );
+  }
 }
 
 export default Header;
