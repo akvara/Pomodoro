@@ -50,7 +50,11 @@ class Header extends Component {
 
   buttonMinus(which) {
     return (
-      <button className="btn btn-sm" onClick={this.minus.bind(this, which)}>
+      <button
+        className="btn btn-sm"
+        aria-label={"Mažiau: " + window.CONFIG[which].name}
+        onClick={this.minus.bind(this, which)}
+      >
         <span className="glyphicon glyphicon-minus" aria-hidden="true"></span>
       </button>
     );
@@ -58,7 +62,11 @@ class Header extends Component {
 
   buttonPlus(which) {
     return (
-      <button className="btn btn-sm" onClick={this.plus.bind(this, which)}>
+      <button
+        className="btn btn-sm"
+        aria-label={"Daugiau: " + window.CONFIG[which].name}
+        onClick={this.plus.bind(this, which)}
+      >
         <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
       </button>
     );
@@ -69,7 +77,12 @@ class Header extends Component {
     if (this.state.muted) muteGlyph = "glyphicon glyphicon-volume-off";
 
     return (
-      <button className="btn btn-sm" onClick={this.toggleMute.bind(this)}>
+      <button
+        className="btn btn-sm"
+        aria-label="Be garso"
+        aria-pressed={this.state.muted}
+        onClick={this.toggleMute.bind(this)}
+      >
         <span className={muteGlyph} aria-hidden="true"></span>
       </button>
     );
@@ -89,27 +102,26 @@ class Header extends Component {
     );
   }
 
+  logoButton() {
+    return (
+      <button
+        className="logo-button"
+        aria-label="Nustatymai"
+        aria-expanded={this.state.visible}
+        title={window.CONFIG.version}
+        onClick={this.toggleVisibility.bind(this)}
+      >
+        <img src={logo} alt="" />
+      </button>
+    );
+  }
+
   render() {
-    if (!this.state.visible)
-      return (
-        <div>
-          <img
-            src={logo}
-            alt="logo"
-            title={window.CONFIG.version}
-            onClick={this.toggleVisibility.bind(this)}
-          />
-        </div>
-      );
+    if (!this.state.visible) return <div>{this.logoButton()}</div>;
 
     return (
       <div>
-        <img
-          src={logo}
-          alt="logo"
-          title={window.CONFIG.version}
-          onClick={this.toggleVisibility.bind(this)}
-        />
+        {this.logoButton()}
         <br />
         <small>{window.CONFIG.version}</small>
         <br />

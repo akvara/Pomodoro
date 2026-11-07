@@ -2,28 +2,27 @@ window.CONFIG = {
   work: {
     name: 'dirbam',
     alert: 'Darbą baigėm - ilsėtis!',
-    // sound: ''https://www.soundjay.com/misc/sounds/bell-ringing-04.mp3'',
-    sound: 'https://www.soundjay.com/misc/dream-harp-08.mp3',
+    sound: '/sounds/work.wav',
     duration: 45,
   },
   rest: {
     name: 'ilsimės',
     alert: 'Poilsis baigėsi, einam dirbt',
-    sound: 'https://www.soundjay.com/misc/sounds/bell-ringing-03.mp3',
+    sound: '/sounds/rest.wav',
     duration: 8,
   },
   stopped: {
     name: 'dirbsim',
   },
-  beepSound: 'http://www.soundjay.com/button/beep-07.wav',
-  clickSound: 'https://www.soundjay.com/button/button-15.mp3',
+  beepSound: '/sounds/beep.wav',
+  clickSound: '/sounds/click.wav',
   endWork: {
     name: 'Darbo diena baigėsi',
-    sound: 'https://www.soundjay.com/footsteps/sounds/footsteps-4.mp3',
+    sound: '/sounds/end.wav',
   },
   maxTotalTime: 490,
   muted: false,
-  version: '6.09.22.12',
+  version: '6.11.07.13',
 };
 
 if (import.meta.env.DEV) {
